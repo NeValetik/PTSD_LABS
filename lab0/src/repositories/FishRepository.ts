@@ -29,41 +29,14 @@ export abstract class BaseFishRepository implements IFishRepository {
     this.fishList.push(fish);
   }
 
-  // Abstract method that must be implemented by concrete repositories
   abstract initializeData(): void;
 }
 
-// In-memory repository implementation
 export class InMemoryFishRepository extends BaseFishRepository {
   constructor() {
     super();
     this.initializeData();
   }
 
-  initializeData(): void {
-    // This method can be extended without modifying the base class
-    // New fish types can be added here without changing existing code
-  }
-}
-
-// JSON-based repository (extending the base without modification)
-export class JsonFishRepository extends BaseFishRepository {
-  private dataSource: string;
-
-  constructor(dataSource: string) {
-    super();
-    this.dataSource = dataSource;
-    this.initializeData();
-  }
-
-  initializeData(): void {
-    // Could load from JSON file
-    // This demonstrates how we can extend functionality without modifying base class
-    console.log(`Loading fish data from: ${this.dataSource}`);
-  }
-
-  // Additional method specific to JSON repository
-  saveToJson(): void {
-    console.log('Saving fish data to JSON...');
-  }
+  initializeData(): void {}
 }

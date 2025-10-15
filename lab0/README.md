@@ -62,3 +62,30 @@ The application provides comprehensive fish management capabilities including ha
 ## Conclusions / Screenshots / Results
 
 The implementation successfully demonstrates how SOLID principles can be applied to create robust and maintainable software systems. The Single Responsibility Principle ensures each class has a clear, focused purpose, the Open-Closed Principle enables system extension without modification, and the Liskov Substitution Principle guarantees that derived classes can be used interchangeably with their base classes. These principles work together to create a flexible and extensible system that can easily accommodate new fish types and repository implementations while maintaining code quality and reducing coupling between components.
+
+So the running of the code gives these results:
+
+All fish list  
+<img src="./public/allFishes.png">
+
+Deep sea fish list
+<img src="./public/deepSea.png">
+
+Freshwater fish list
+<img src="./public/freshWater.png">
+
+Large fish list
+<img src="./public/large.png">
+
+Small fish list
+<img src="./public/small.png">
+
+Carnivorous fish list
+<img src="./public/carnivour.png">
+
+Total fish statistics + fish instance info
+<img src="./public/statistics.png">
+
+Creation of fish instance
+<img src="./public/createAFish.png">
+

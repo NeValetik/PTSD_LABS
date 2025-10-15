@@ -1,13 +1,9 @@
 import { InMemoryFishRepository } from './FishRepository';
 import { FishFactory } from '../services/FishService';
 
-// Concrete implementation that extends the base repository
-// Demonstrates Open-Closed Principle - we can add new functionality
-// without modifying the base repository class
 export class SampleFishRepository extends InMemoryFishRepository {
   
   initializeData(): void {
-    // Add sample tropical fish
     this.addFish(FishFactory.createTropicalFish(
       '1', 'Clownfish', 'Amphiprion ocellatus', 10, 'Omnivore'
     ));
@@ -20,7 +16,6 @@ export class SampleFishRepository extends InMemoryFishRepository {
       '3', 'Parrotfish', 'Scarus coeruleus', 30, 'Herbivore'
     ));
 
-    // Add sample deep sea fish
     this.addFish(FishFactory.createDeepSeaFish(
       '4', 'Anglerfish', 'Melanocetus johnsonii', 20, 'Carnivore'
     ));
@@ -33,7 +28,6 @@ export class SampleFishRepository extends InMemoryFishRepository {
       '6', 'Gulper Eel', 'Eurypharynx pelecanoides', 100, 'Carnivore'
     ));
 
-    // Add sample freshwater fish
     this.addFish(FishFactory.createFreshwaterFish(
       '7', 'Goldfish', 'Carassius auratus', 20, 'Omnivore'
     ));
@@ -46,7 +40,6 @@ export class SampleFishRepository extends InMemoryFishRepository {
       '9', 'Trout', 'Salmo trutta', 40, 'Carnivore'
     ));
 
-    // Add some additional fish to demonstrate variety
     this.addFish(FishFactory.createTropicalFish(
       '10', 'Butterflyfish', 'Chaetodon capistratus', 12, 'Omnivore'
     ));
@@ -60,9 +53,6 @@ export class SampleFishRepository extends InMemoryFishRepository {
     ));
   }
 
-  // Additional methods specific to this repository
-  // This demonstrates Open-Closed Principle - we can add new functionality
-  // without modifying the base class
   getFishCount(): number {
     return this.getAllFish().length;
   }
