@@ -36,7 +36,7 @@ export class TropicalFish extends Fish {
   }
 
   getInfo(): string {
-    return `🐠 ${super.getInfo()} - Tropical species`;
+    return `${super.getInfo()} - Tropical species`;
   }
 }
 
@@ -46,7 +46,7 @@ export class DeepSeaFish extends Fish {
   }
 
   getInfo(): string {
-    return `🦈 ${super.getInfo()} - Deep sea species`;
+    return `${super.getInfo()} - Deep sea species`;
   }
 }
 
@@ -56,6 +56,6 @@ export class FreshwaterFish extends Fish {
   }
 
   getInfo(): string {
-    return `🐟 ${super.getInfo()} - Freshwater species`;
+    return `${super.getInfo()} - Freshwater species`;
   }
 }
