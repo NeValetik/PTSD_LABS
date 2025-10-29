@@ -1,6 +1,5 @@
 import { IFish } from '../models/Fish';
 
-// Single Responsibility Principle: This class is only responsible for displaying fish information
 export class FishDisplay {
   
   static displayFishList(fishList: IFish[], title: string = "Fish List"): void {

@@ -1,6 +1,7 @@
 # SOLID Principles
 
 ## Author: Vladimir Vitcovschii
+## Group: FAF-231
 
 ----
 

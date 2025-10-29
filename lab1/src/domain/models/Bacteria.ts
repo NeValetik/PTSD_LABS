@@ -25,6 +25,18 @@ class Bacteria implements Prototype {
   clone(): Prototype {
     return new Bacteria({instance: this});
   }
+
+  getId(): string {
+    return this.id;
+  }
+
+  getName(): string {
+    return this.name;
+  }
+
+  getDescription(): string {
+    return this.description;
+  }
 }
 
 export { Bacteria, Prototype };

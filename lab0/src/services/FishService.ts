@@ -1,14 +1,9 @@
 import { IFish, Fish, TropicalFish, DeepSeaFish, FreshwaterFish } from '../models/Fish';
 import { IFishRepository } from '../repositories/FishRepository';
 
-// Liskov Substitution Principle: Objects of a superclass should be replaceable 
-// with objects of its subclasses without breaking the application
-
-// Service class that works with any fish repository implementation
 export class FishService {
   constructor(private fishRepository: IFishRepository) {}
 
-  // This method works with any repository implementation
   getAllFish(): IFish[] {
     return this.fishRepository.getAllFish();
   }
@@ -21,7 +16,6 @@ export class FishService {
     return this.fishRepository.getFishByHabitat(habitat);
   }
 
-  // Business logic methods
   getLargeFish(minSize: number): IFish[] {
     return this.fishRepository.getAllFish().filter(fish => fish.size >= minSize);
   }
@@ -36,8 +30,6 @@ export class FishService {
     );
   }
 
-  // Method that demonstrates Liskov Substitution
-  // Any fish type can be passed here and will work correctly
   displayFishInfo(fish: IFish): string {
     return `
 Fish Information:
@@ -46,7 +38,6 @@ ${fish.getHabitatInfo()}
 ---`;
   }
 
-  // Method that works with collections of any fish type
   displayAllFishInfo(): string {
     const allFish = this.getAllFish();
     if (allFish.length === 0) {
@@ -57,8 +48,6 @@ ${fish.getHabitatInfo()}
   }
 }
 
-// Factory class to create different types of fish
-// Demonstrates how different fish types can be substituted
 export class FishFactory {
   static createTropicalFish(id: string, name: string, species: string, size: number, diet: string): TropicalFish {
     return new TropicalFish(id, name, species, size, diet);
@@ -72,7 +61,6 @@ export class FishFactory {
     return new FreshwaterFish(id, name, species, size, diet);
   }
 
-  // Generic method that can create any fish type
   static createFish<T extends Fish>(
     fishType: new (id: string, name: string, species: string, size: number, diet: string) => T,
     id: string, 
