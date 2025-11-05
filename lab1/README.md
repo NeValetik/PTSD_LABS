@@ -208,36 +208,36 @@ Created three service instances:
 Service 1 address: BacteriaService {
   bacteriaRepository: BacteriaRepository {
     bacteriaList: [
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria]
+      [EColiBacteria],
+      [StreptococcusBacteria],
+      [LactobacillusBacteria],
+      [StaphylococcusBacteria],
+      [BacillusBacteria],
+      [SalmonellaBacteria]
     ]
   }
 }
 Service 2 address: BacteriaService {
   bacteriaRepository: BacteriaRepository {
     bacteriaList: [
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria]
+      [EColiBacteria],
+      [StreptococcusBacteria],
+      [LactobacillusBacteria],
+      [StaphylococcusBacteria],
+      [BacillusBacteria],
+      [SalmonellaBacteria]
     ]
   }
 }
 Service 3 address: BacteriaService {
   bacteriaRepository: BacteriaRepository {
     bacteriaList: [
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria],
-      [Bacteria]
+      [EColiBacteria],
+      [StreptococcusBacteria],
+      [LactobacillusBacteria],
+      [StaphylococcusBacteria],
+      [BacillusBacteria],
+      [SalmonellaBacteria]
     ]
   }
 }
@@ -245,7 +245,7 @@ Are they the same instance? true
 Total bacteria count (from any instance): 6
 
 
-🔧 CRUD OPERATIONS - Create, Read, Update, Delete
+CRUD OPERATIONS - Create, Read, Update, Delete
 ------------------------------------------------------------
 Created custom bacteria:
    ID: 7
@@ -325,15 +325,10 @@ All bacteria:
 npm install
 ```
 
-2. Run the application:
-```bash
-npm run dev
-```
-
 Or build and run:
 ```bash
 npm run build
-node dist/client.js
+npm run start
 ```
 
 ## Conclusions:
