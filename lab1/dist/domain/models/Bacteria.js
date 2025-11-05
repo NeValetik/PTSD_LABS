@@ -2,19 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SalmonellaBacteria = exports.BacillusBacteria = exports.StaphylococcusBacteria = exports.LactobacillusBacteria = exports.StreptococcusBacteria = exports.EColiBacteria = exports.Bacteria = void 0;
 class Bacteria {
-    constructor({ id, name, description, instance }) {
-        if (instance) {
-            this.id = instance.id;
-            this.name = instance.name;
-            this.description = instance.description;
-            return;
+    constructor(args) {
+        if ('instance' in args) {
+            this.id = args.instance.id;
+            this.name = args.instance.name;
+            this.description = args.instance.description;
         }
-        if (!id || !name || !description) {
-            throw new Error("id, name, and description are required");
+        else {
+            const { id, name, description } = args;
+            this.id = id;
+            this.name = name;
+            this.description = description;
         }
-        this.id = id;
-        this.name = name;
-        this.description = description;
     }
     clone() {
         return new Bacteria({ instance: this });

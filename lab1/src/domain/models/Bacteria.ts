@@ -9,24 +9,30 @@ interface BacteriaProduct {
   getDescription(): string;
 }
 
+type BacteriaConstructor = {
+  id: string;
+  name: string;
+  description: string;
+} | {
+  instance: Bacteria;
+};
+
 class Bacteria implements Prototype, BacteriaProduct {
   protected id: string;
   protected name: string;
   protected description: string;
 
-  constructor({id, name, description, instance}: {id?: string, name?: string, description?: string, instance?: Bacteria}) {
-    if (instance) {
-      this.id = instance.id;
-      this.name = instance.name;
-      this.description = instance.description;
-      return;
+  constructor(args: BacteriaConstructor) {
+    if ('instance' in args) {
+      this.id = args.instance.id;
+      this.name = args.instance.name;
+      this.description = args.instance.description;
+    } else {
+      const { id, name, description } = args;
+      this.id = id;
+      this.name = name;
+      this.description = description;
     }
-    if (!id || !name || !description) {
-      throw new Error("id, name, and description are required");
-    }
-    this.id = id;
-    this.name = name;
-    this.description = description;
   }
 
   clone(): Prototype {
