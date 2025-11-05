@@ -60,16 +60,16 @@ class BacteriaApp {
     const service3 = BacteriaService.getInstance(this.bacteriaRepository);
 
     console.log("Created three service instances:");
-    console.log(`Service 1 address: ${service1}`);
-    console.log(`Service 2 address: ${service2}`);
-    console.log(`Service 3 address: ${service3}`);
+    console.log(`Service 1 address:`, service1);
+    console.log(`Service 2 address:`, service2);
+    console.log(`Service 3 address:`, service3);
     console.log(`Are they the same instance? ${service1 === service2 && service2 === service3}`);
     console.log(`Total bacteria count (from any instance): ${service1.getAllBacteria().length}`);
     console.log("\n");
   }
 
   private demonstrateCRUDOperations(): void {
-    console.log("🔧 CRUD OPERATIONS - Create, Read, Update, Delete");
+    console.log("CRUD OPERATIONS - Create, Read, Update, Delete");
     console.log("-".repeat(60));
 
     // CREATE - Create a custom bacteria

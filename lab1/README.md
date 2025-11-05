@@ -1,92 +1,360 @@
 # Creational Design Patterns
 
-## Author: Vladimir Vitcovschii
+## Author: Vitcovschii Vladimir
 ## Group: FAF-231
 
-----
+------
 
 ## Objectives:
 
-* Get familiar with the Creational DPs;
-* Choose a specific domain;
-* Implement at least 3 SOLID principles;
+__1. Study and understand the Creational Design Patterns.__
 
+__2. Choose a domain, define its main classes/models/entities and choose the appropriate instantiation mechanisms.__
 
-## Used SOLID Principles: 
+__3. Use some creational design patterns for object instantiation in a sample project.__
 
-* Single Responsibility Principle
-* Open-Closed Principle
-* Liskov Substitution Principle
+## Theory:
 
+In software engineering, the creational design patterns are the general solutions that deal with object creation, trying to create objects in a manner suitable to the situation. The basic form of object creation could result in design problems or added complexity to the design. Creational design patterns solve this problem by optimizing, hiding or controlling the object creation.
 
-## Implementation
+Some examples of this kind of design patterns are:
+   * Singleton
+   * Builder
+   * Prototype
+   * Object Pooling
+   * Factory Method
+   * Abstract Factory
 
-This TypeScript application demonstrates three fundamental SOLID principles through an ocean fish management system. The implementation showcases how these principles can be applied to create maintainable, extensible, and robust object-oriented software.
+## Domain Selection:
 
-The Single Responsibility Principle is demonstrated through the clear separation of concerns across different classes. Each class has only one reason to change, with Fish models responsible solely for fish data and behavior, FishDisplay handling only presentation logic, FishService managing business operations, and FishRepository dealing exclusively with data access. The Open-Closed Principle is implemented through the repository system, where the BaseFishRepository is closed for modification but open for extension. New repository types like SampleFishRepository and JsonFishRepository can be added without changing existing code. The Liskov Substitution Principle is exemplified through the fish type hierarchy, where TropicalFish, DeepSeaFish, and FreshwaterFish are fully interchangeable with their base Fish class, and any repository implementation can be substituted in the FishService without breaking functionality.
+For this laboratory work, I have chosen the **Bacteria Management System** domain. This domain is well-suited for demonstrating creational design patterns because:
+
+- Bacteria come in various types (E. coli, Streptococcus, Lactobacillus, etc.) that require different initialization parameters
+- A single service instance should manage all bacteria operations (Singleton pattern)
+- Bacteria can reproduce through cloning, which is a natural use case for the Prototype pattern
+- Creating different types of bacteria can be abstracted through factory methods
+
+## Used Design Patterns:
+
+* **Factory Pattern** - Used in `BacteriaFactory` class to create different types of bacteria with predefined configurations
+* **Singleton Pattern** - Implemented in `BacteriaService` to ensure only one instance manages all bacteria operations
+* **Prototype Pattern** - Implemented in `Bacteria` class through the `clone()` method, allowing bacteria to be duplicated
+
+## Implementation:
+
+### Project Structure:
+
+```
+src/
+├── client.ts                          # Main application entry point
+└── domain/
+    ├── models/
+    │   └── Bacteria.ts                # Bacteria model implementing Prototype pattern
+    ├── repositories/
+    │   └── BacteriaRepository.ts      # Repository for storing and managing bacteria
+    └── services/
+        ├── BacteriaFactory.ts         # Factory for creating different bacteria types
+        └── BacteriaService.ts         # Singleton service for bacteria operations
+```
+
+### 1. Factory Pattern Implementation
+
+The Factory Pattern is implemented in the `BacteriaFactory` class, which provides static methods to create different types of bacteria with predefined configurations. This pattern encapsulates the creation logic and makes it easy to add new bacteria types without modifying existing code.
+
+**Key Features:**
+- Static factory methods for each bacteria type (E. coli, Streptococcus, Lactobacillus, etc.)
+- A generic `createBacteria()` method for custom bacteria creation
+- Centralized creation logic that ensures consistent initialization
+
+**Code Snippet:**
 
 ```typescript
-// Single Responsibility Principle - Each class has one responsibility
-export class FishService {
-  constructor(private fishRepository: IFishRepository) {}
-  
-  // Business logic only
-  getLargeFish(minSize: number): IFish[] {
-    return this.fishRepository.getAllFish().filter(fish => fish.size >= minSize);
+export class BacteriaFactory {
+  static createEColi(id: string): Bacteria {
+    return new Bacteria({
+      id,
+      name: "E. coli",
+      description: "Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines"
+    });
   }
-}
 
-// Open-Closed Principle - Open for extension, closed for modification
-export abstract class BaseFishRepository implements IFishRepository {
-  abstract getAllFish(): IFish[];
-  // Base implementation closed for modification
-}
-
-export class SampleFishRepository extends BaseFishRepository {
-  // Extension without modification of base class
-  getAllFish(): IFish[] {
-    return this.sampleData;
+  static createStreptococcus(id: string): Bacteria {
+    return new Bacteria({
+      id,
+      name: "Streptococcus",
+      description: "Gram-positive, spherical bacterium that can cause various infections"
+    });
   }
-}
 
-// Liskov Substitution Principle - Subtypes are substitutable
-export class TropicalFish extends Fish {
-  getInfo(): string {
-    return `🐠 ${super.getInfo()} - Tropical species`;
+  static createBacteria(id: string, name: string, description: string): Bacteria {
+    return new Bacteria({ id, name, description });
   }
 }
 ```
 
-The application provides comprehensive fish management capabilities including habitat-based filtering, size-based categorization, and diet-based organization. Users can explore different fish types through an interactive console interface that demonstrates the practical application of SOLID principles in creating flexible and maintainable software systems.
+### 2. Singleton Pattern Implementation
+
+The Singleton Pattern is implemented in the `BacteriaService` class, ensuring that only one instance of the service exists throughout the application lifecycle. This is crucial for maintaining consistent state across the application.
+
+**Key Features:**
+- Private constructor to prevent direct instantiation
+- Static `getInstance()` method that returns the same instance
+- Thread-safe implementation (for single-threaded JavaScript/TypeScript context)
+
+**Code Snippet:**
+
+```typescript
+export class BacteriaService implements IBacteriaService {
+  private static instance: BacteriaService | null = null;
+  private bacteriaRepository: IBacteriaRepository;
+
+  private constructor(bacteriaRepository: IBacteriaRepository) {
+    this.bacteriaRepository = bacteriaRepository;
+  }
+
+  public static getInstance(bacteriaRepository: IBacteriaRepository): BacteriaService {
+    if (BacteriaService.instance === null) {
+      BacteriaService.instance = new BacteriaService(bacteriaRepository);
+    }
+    return BacteriaService.instance;
+  }
+
+  // ... other methods
+}
+```
+
+### 3. Prototype Pattern Implementation
+
+The Prototype Pattern is implemented in the `Bacteria` class, which implements the `Prototype` interface. This allows bacteria to be cloned, which is useful for simulating bacterial reproduction (mitosis).
+
+**Key Features:**
+- `Bacteria` class implements the `Prototype` interface with a `clone()` method
+- The `clone()` method creates a new instance with the same properties
+- The repository's `mitoz()` method uses cloning to simulate bacterial reproduction
+
+**Code Snippet:**
+
+```typescript
+interface Prototype {
+  clone(): Prototype;
+}
+
+class Bacteria implements Prototype {
+  private id: string;
+  private name: string;
+  private description: string;
+
+  constructor({id, name, description, instance}: {id?: string, name?: string, description?: string, instance?: Bacteria}) {
+    if (instance) {
+      this.id = instance.id;
+      this.name = instance.name;
+      this.description = instance.description;
+      return;
+    }
+    // ... initialization logic
+  }
+
+  clone(): Prototype {
+    return new Bacteria({instance: this});
+  }
+}
+```
+
+**Usage in Repository:**
+
+```typescript
+// mitoz implements the Prototype Pattern - clones bacteria using their clone() method
+mitoz(bacteria: Bacteria): void {
+  this.bacteriaList.push(bacteria.clone() as Bacteria);
+}
+```
+
+## Demonstration:
+
+The application demonstrates all three patterns through a comprehensive demonstration script in `client.ts`. The demonstration includes:
+
+1. **Factory Pattern Demo:** Creates various types of bacteria using factory methods
+2. **Singleton Pattern Demo:** Verifies that multiple calls to `getInstance()` return the same instance
+4. **Prototype Pattern Demo:** Demonstrates cloning bacteria and verifying they are separate instances
+5. **Mitoz Feature:** Shows bacterial reproduction using the prototype pattern
+
+**Example Output:**
+```ps
+============================================================
+BACTERIA MANAGEMENT SYSTEM - PATTERN DEMONSTRATION
+============================================================
 
 
-## Conclusions / Screenshots / Results
+FACTORY PATTERN - Creating Bacteria using Factory
+------------------------------------------------------------
+Created bacteria using factory methods:
+   1. [1] E. coli
+      Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines
+   2. [2] Streptococcus
+      Gram-positive, spherical bacterium that can cause various infections
+   3. [3] Lactobacillus
+      Gram-positive, rod-shaped bacterium beneficial for digestive health 
+   4. [4] Staphylococcus
+      Gram-positive, spherical bacterium that can cause skin infections   
+   5. [5] Bacillus
+      Gram-positive, rod-shaped bacterium that forms spores
+   6. [6] Salmonella
+      Gram-negative, rod-shaped bacterium that can cause food poisoning   
 
-The implementation successfully demonstrates how SOLID principles can be applied to create robust and maintainable software systems. The Single Responsibility Principle ensures each class has a clear, focused purpose, the Open-Closed Principle enables system extension without modification, and the Liskov Substitution Principle guarantees that derived classes can be used interchangeably with their base classes. These principles work together to create a flexible and extensible system that can easily accommodate new fish types and repository implementations while maintaining code quality and reducing coupling between components.
 
-So the running of the code gives these results:
+SINGLETON PATTERN - Verifying Single Instance
+------------------------------------------------------------
+Created three service instances:
+Service 1 address: BacteriaService {
+  bacteriaRepository: BacteriaRepository {
+    bacteriaList: [
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria]
+    ]
+  }
+}
+Service 2 address: BacteriaService {
+  bacteriaRepository: BacteriaRepository {
+    bacteriaList: [
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria]
+    ]
+  }
+}
+Service 3 address: BacteriaService {
+  bacteriaRepository: BacteriaRepository {
+    bacteriaList: [
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria],
+      [Bacteria]
+    ]
+  }
+}
+Are they the same instance? true
+Total bacteria count (from any instance): 6
 
-All fish list  
-<img src="./public/allFishes.png">
 
-Deep sea fish list
-<img src="./public/deepSea.png">
+🔧 CRUD OPERATIONS - Create, Read, Update, Delete
+------------------------------------------------------------
+Created custom bacteria:
+   ID: 7
+   Name: Custom Bacteria
+   Description: A custom bacterium created for testing purposes
 
-Freshwater fish list
-<img src="./public/freshWater.png">
+ Read bacteria by ID (ID: 1):
+   E. coli - Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines
 
-Large fish list
-<img src="./public/large.png">
+ All bacteria in repository:
+   Total count: 7
 
-Small fish list
-<img src="./public/small.png">
+ Updated bacteria (ID: 7):
+   Updated Custom Bacteria - This bacteria has been updated with new information
 
-Carnivorous fish list
-<img src="./public/carnivour.png">
+ Deleted bacteria (ID: 6 - Salmonella)
+   Remaining bacteria count: 6
 
-Total fish statistics + fish instance info
-<img src="./public/statistics.png">
 
-Creation of fish instance
-<img src="./public/createAFish.png">
+ PROTOTYPE PATTERN - Cloning Bacteria
+------------------------------------------------------------
+Original bacteria:
+   ID: 1
+   Name: E. coli
+   Description: Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines
 
+Cloned bacteria:
+   ID: 1
+   Name: E. coli
+   Description: Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines
+
+Are they the same object? false
+Do they have the same ID? true
+Do they have the same name? true
+
+ Added cloned bacteria with new ID (ID: 8)
+
+
+ MITOZ - Prototype Pattern Implementation
+------------------------------------------------------------
+Initial bacteria count: 7
+After mitoz (prototype pattern cloning): 8
+   Added bacteria: E. coli
+   Growth: +1 bacteria
+
+
+============================================================
+FINAL SUMMARY
+============================================================
+Total bacteria in repository: 8
+
+All bacteria:
+   1. [1] E. coli
+      Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines
+   2. [2] Streptococcus
+      Gram-positive, spherical bacterium that can cause various infections
+   3. [3] Lactobacillus
+      Gram-positive, rod-shaped bacterium beneficial for digestive health 
+   4. [4] Staphylococcus
+      Gram-positive, spherical bacterium that can cause skin infections   
+   5. [5] Bacillus
+      Gram-positive, rod-shaped bacterium that forms spores
+   6. [7] Updated Custom Bacteria
+      This bacteria has been updated with new information
+   7. [8] E. coli
+      Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines
+   8. [1] E. coli
+      Escherichia coli - Gram-negative, rod-shaped bacterium commonly found in intestines
+
+============================================================
+```
+
+## Running the Project:
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Run the application:
+```bash
+npm run dev
+```
+
+Or build and run:
+```bash
+npm run build
+node dist/client.js
+```
+
+## Conclusions:
+
+This laboratory work successfully demonstrates the implementation of three creational design patterns:
+
+1. **Factory Pattern** provides a clean way to create different types of bacteria without exposing the creation logic, making the code more maintainable and extensible.
+
+2. **Singleton Pattern** ensures that only one instance of the `BacteriaService` exists, which is essential for maintaining consistent state and avoiding conflicts in a bacteria management system.
+
+3. **Prototype Pattern** allows bacteria to be cloned efficiently, which is particularly useful for simulating bacterial reproduction (mitosis) in a biological context.
+
+The chosen domain (Bacteria Management System) provides a natural and intuitive context for these patterns, making the code both educational and practical. The implementation follows best practices with proper separation of concerns, interfaces for abstraction, and clear demonstration of each pattern's benefits.
+
+## Screenshots / Results:
+
+The application produces console output demonstrating all three patterns working together. The output shows:
+- Factory-created bacteria instances
+- Singleton verification with multiple service instances
+- CRUD operations on bacteria
+- Prototype cloning functionality
+- Bacterial reproduction simulation through the mitoz feature
+
+All patterns are implemented correctly and work harmoniously within the application architecture.
