@@ -1,0 +1,16 @@
+{
+  "name": "lab0-typescript",
+  "version": "1.0.0",
+  "description": "TypeScript project for lab0",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "ts-node src/main.ts",
+    "build": "tsc",
+    "dev": "ts-node src/main.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "@types/node": "^20.0.0"
+  }
+}
